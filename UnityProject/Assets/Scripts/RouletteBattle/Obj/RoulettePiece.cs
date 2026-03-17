@@ -1,5 +1,3 @@
-using RouletteBattle;
-using RouletteBattle;
 using UnityEngine;
 using UnityEngine.UI;
 
