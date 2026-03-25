@@ -1,4 +1,4 @@
-using RouletteBattle;
+using RouletteBattle.Battle.Character;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
@@ -23,22 +23,22 @@ public class Main : MonoBehaviour
 
 
         chara1 = new BattleCharacter();
-        chara1.m_pieceList = new List<BattleCharacter.PieceParameter>();
-        chara1.m_pieceList.Add(new BattleCharacter.PieceParameter() { m_pieceType = BattleCharacter.PieceParameter.PieceType.Skill, m_value = 20 });
-        chara1.m_pieceList.Add(new BattleCharacter.PieceParameter() { m_pieceType = BattleCharacter.PieceParameter.PieceType.Skill, m_value = 20 });
-        chara1.m_pieceList.Add(new BattleCharacter.PieceParameter() { m_pieceType = BattleCharacter.PieceParameter.PieceType.Skill, m_value = 0 });
-        chara1.m_pieceList.Add(new BattleCharacter.PieceParameter() { m_pieceType = BattleCharacter.PieceParameter.PieceType.Skill, m_value = 20 });
-        chara1.m_pieceList.Add(new BattleCharacter.PieceParameter() { m_pieceType = BattleCharacter.PieceParameter.PieceType.Skill, m_value = 20 });
-        chara1.m_pieceList.Add(new BattleCharacter.PieceParameter() { m_pieceType = BattleCharacter.PieceParameter.PieceType.Skill, m_value = 20 });
+        chara1.m_pieceList = new List<PieceParameter>();
+        chara1.m_pieceList.Add(new PieceParameter() { m_pieceType = PieceParameter.PieceType.Skill, m_value = 20 });
+        chara1.m_pieceList.Add(new PieceParameter() { m_pieceType = PieceParameter.PieceType.Skill, m_value = 20 });
+        chara1.m_pieceList.Add(new PieceParameter() { m_pieceType = PieceParameter.PieceType.Skill, m_value = 0 });
+        chara1.m_pieceList.Add(new PieceParameter() { m_pieceType = PieceParameter.PieceType.Skill, m_value = 20 });
+        chara1.m_pieceList.Add(new PieceParameter() { m_pieceType = PieceParameter.PieceType.Skill, m_value = 20 });
+        chara1.m_pieceList.Add(new PieceParameter() { m_pieceType = PieceParameter.PieceType.Skill, m_value = 20 });
 
         chara2 = new BattleCharacter();
-        chara2.m_pieceList = new List<BattleCharacter.PieceParameter>();
-        chara2.m_pieceList.Add(new BattleCharacter.PieceParameter() { m_pieceType = BattleCharacter.PieceParameter.PieceType.Magic, m_value = 20 });
-        chara2.m_pieceList.Add(new BattleCharacter.PieceParameter() { m_pieceType = BattleCharacter.PieceParameter.PieceType.Magic, m_value = 20 });
-        chara2.m_pieceList.Add(new BattleCharacter.PieceParameter() { m_pieceType = BattleCharacter.PieceParameter.PieceType.Magic, m_value = 20 });
-        chara2.m_pieceList.Add(new BattleCharacter.PieceParameter() { m_pieceType = BattleCharacter.PieceParameter.PieceType.Magic, m_value = 20 });
-        chara2.m_pieceList.Add(new BattleCharacter.PieceParameter() { m_pieceType = BattleCharacter.PieceParameter.PieceType.Magic, m_value = 0 });
-        chara2.m_pieceList.Add(new BattleCharacter.PieceParameter() { m_pieceType = BattleCharacter.PieceParameter.PieceType.Magic, m_value = 20 });
+        chara2.m_pieceList = new List<PieceParameter>();
+        chara2.m_pieceList.Add(new PieceParameter() { m_pieceType = PieceParameter.PieceType.Magic, m_value = 20 });
+        chara2.m_pieceList.Add(new PieceParameter() { m_pieceType = PieceParameter.PieceType.Magic, m_value = 20 });
+        chara2.m_pieceList.Add(new PieceParameter() { m_pieceType = PieceParameter.PieceType.Magic, m_value = 20 });
+        chara2.m_pieceList.Add(new PieceParameter() { m_pieceType = PieceParameter.PieceType.Magic, m_value = 20 });
+        chara2.m_pieceList.Add(new PieceParameter() { m_pieceType = PieceParameter.PieceType.Magic, m_value = 0 });
+        chara2.m_pieceList.Add(new PieceParameter() { m_pieceType = PieceParameter.PieceType.Magic, m_value = 20 });
 
         m_roulette[0].Initialize(chara1);
         m_roulette[1].Initialize(chara2);
@@ -82,7 +82,7 @@ public class Main : MonoBehaviour
 
         int rouletteTarget = 0;
         int opponentPlayerNum = 0;
-        BattleCharacter.PieceParameter selectPieceParam;
+        PieceParameter selectPieceParam;
         BattleCharacter chara;
         bool endBattle = false;
 
@@ -106,19 +106,19 @@ public class Main : MonoBehaviour
             selectPieceParam = m_roulette[rouletteTarget].GetSelectPieceParameter();
             switch (selectPieceParam.m_pieceType)
             {
-                case BattleCharacter.PieceParameter.PieceType.Damage:
+                case PieceParameter.PieceType.Damage:
                     opponentPlayerNum = rouletteTarget ^ 1;
                     chara = GetCharacter(opponentPlayerNum);
                     chara.m_healthPoint -= selectPieceParam.m_value;
                     Debug.Log($"プレイヤー{rouletteTarget + 1}の攻撃　プレイヤー{opponentPlayerNum+1}に{selectPieceParam.m_value}のダメージ");
                     if(chara.m_healthPoint <= 0)
                     {
-                        Debug.Log($"プレイヤー{opponentPlayerNum + 1}は力尽きた");
+                        Debug.Log($"プレイヤー{opponentPlayerNum + 1}は力尽きた プレイヤー{rouletteTarget + 1}の勝利");
                         endBattle = true;
                     }
 
                     break;
-                case BattleCharacter.PieceParameter.PieceType.Miss:
+                case PieceParameter.PieceType.Miss:
                     Debug.Log($"プレイヤー{rouletteTarget + 1}の攻撃はミス");
                     break;
             }

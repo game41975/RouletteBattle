@@ -1,5 +1,5 @@
 using NUnit.Framework;
-using RouletteBattle;
+using RouletteBattle.Battle.Character;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
@@ -17,7 +17,7 @@ namespace RouletteBattle
 
         private Coroutine m_coroutineRoulette = null;
 
-        public BattleCharacter.PieceParameter GetSelectPieceParameter()
+        public PieceParameter GetSelectPieceParameter()
         {
             return m_pieceList[m_selectedPieceCount].GetParam();
         }
