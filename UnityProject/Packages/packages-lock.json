@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.akatukigame.unitygeneraltools": {
+      "version": "https://github.com/game41975/UnityGeneralTools.git?path=/Packages/com.akatukigame.unitygeneraltools",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "c0e22729b9d6c5a5c3a0472e56a8f2d07c409cfc"
+    },
     "com.unity.addressables": {
       "version": "2.9.1",
       "depth": 0,
