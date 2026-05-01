@@ -5,6 +5,8 @@ using System.Collections;
 using System;
 using System.ComponentModel;
 using Unity.Collections;
+using UnityEngine.AddressableAssets;
+using DataImporter;
 
 public class Main : MonoBehaviour
 {
@@ -20,7 +22,6 @@ public class Main : MonoBehaviour
         Type classTyp2 = Type.GetType("MonoBehaviour");
         Type c3 = Type.GetType("RouletteBattle.Skill");
         Type c4 = Type.GetType("TestList");
-
 
         chara1 = new BattleCharacter();
         chara1.m_pieceList = new List<PieceParameter>();
@@ -43,7 +44,21 @@ public class Main : MonoBehaviour
         m_roulette[0].Initialize(chara1);
         m_roulette[1].Initialize(chara2);
 
+        StartCoroutine(LoadAddressableAssetTest());
         StartCoroutine(MainLoopAsync());
+    }
+
+    public IEnumerator LoadAddressableAssetTest()
+    {
+        var handle = Addressables.LoadAssetAsync<ScriptableObjectBase>("CharacterInitStatus");
+        yield return handle.Task;
+
+        if (handle.IsDone)
+        {
+            var loadData = handle.Result;
+        }
+
+        yield break;
     }
 
 

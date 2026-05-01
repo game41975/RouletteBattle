@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e5d17a21594effb4e9591490b009e7aa, type: 3}
-  m_Name: unifiedraytracing_BundledAssetGroupSchema
+  m_Name: RouletteBattleAssetGroup_BundledAssetGroupSchema
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.GroupSchemas.BundledAssetGroupSchema
-  m_Group: {fileID: 11400000, guid: 61cc774716b6ffc45b2e23ca23c30130, type: 2}
+  m_Group: {fileID: 11400000, guid: 56540bf5ae45d074689c1aec0c21768d, type: 2}
   m_InternalBundleIdMode: 1
   m_Compression: 1
   m_IncludeAddressInCatalog: 1
@@ -35,9 +35,9 @@ MonoBehaviour:
   m_RedirectLimit: -1
   m_RetryCount: 0
   m_BuildPath:
-    m_Id: 07f0bae49c1a43c4dbe8818269f19b7a
+    m_Id: 453643a09b7603e458483875d910acfb
   m_LoadPath:
-    m_Id: 19e9adbdf27edd54497fdfc450ab0c10
+    m_Id: b6a540b17b07b4a4eb0e928a430381ff
   m_BundleMode: 0
   m_AssetBundleProviderType:
     m_AssemblyName: Unity.ResourceManager, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
