@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BootScene : MonoBehaviour
 {
@@ -8,13 +9,7 @@ public class BootScene : MonoBehaviour
 
     public IEnumerator Start()
     {
-        yield return new WaitForSeconds(3);
-
-        m_fadeScreen.FadeIn(2);
-
-        yield return new WaitWhile(() => m_fadeScreen.IsFading);
-
-        Debug.Log("Boot");
+        SceneManager.LoadScene("Title");
 
         yield break;
     }
