@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using RouletteBattle.Battle.Character;
+using RouletteBattle.Battle;
 
 namespace RouletteBattle
 {
@@ -14,15 +15,15 @@ namespace RouletteBattle
 
         private bool m_selected;
 
-        private PieceParameter m_param;
-        private PieceParameter.PieceType m_pieceType;
+        private RoulettePieceParameter m_param;
+        private RoulettePieceParameter.PieceType m_pieceType;
 
-        public PieceParameter GetParam()
+        public RoulettePieceParameter GetParam()
         {
             return m_param;
         }
 
-        public void Init(PieceParameter param)
+        public void Init(RoulettePieceParameter param)
         {
             m_param = param;
 
@@ -30,10 +31,10 @@ namespace RouletteBattle
             string setText = "";
             switch (param.m_pieceType)
             {
-                case PieceParameter.PieceType.Damage:
+                case RoulettePieceParameter.PieceType.Damage:
                     setText = $"{param.m_value}のダメージ";
                     break;
-                case PieceParameter.PieceType.Miss:
+                case RoulettePieceParameter.PieceType.Miss:
                     setText = "ミス";
                     break;
             }

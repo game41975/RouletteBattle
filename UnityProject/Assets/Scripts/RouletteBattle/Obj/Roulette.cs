@@ -3,6 +3,7 @@ using RouletteBattle.Battle.Character;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+using RouletteBattle.Battle;
 
 namespace RouletteBattle
 {
@@ -17,7 +18,7 @@ namespace RouletteBattle
 
         private Coroutine m_coroutineRoulette = null;
 
-        public PieceParameter GetSelectPieceParameter()
+        public RoulettePieceParameter GetSelectPieceParameter()
         {
             return m_pieceList[m_selectedPieceCount].GetParam();
         }

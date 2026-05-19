@@ -7,45 +7,78 @@ using System.ComponentModel;
 using Unity.Collections;
 using UnityEngine.AddressableAssets;
 using DataImporter;
+using RouletteBattle.Battle;
 
-public class Main : MonoBehaviour
+public class BattleTestScene : MonoBehaviour
 {
+    enum State
+    {
+        None = -1,
+
+        INIT,
+        MAIN,
+
+        Max
+    }
+
     [SerializeField]
     private RouletteBattle.Roulette[] m_roulette;
 
     private BattleCharacter chara1;
     private BattleCharacter chara2;
 
+    private State m_currentState;    
+
+
     public void Start()
     {
-        Type classType = Type.GetType("UnityEngine.MonoBehaviour");
-        Type classTyp2 = Type.GetType("MonoBehaviour");
-        Type c3 = Type.GetType("RouletteBattle.Skill");
-        Type c4 = Type.GetType("TestList");
+        ChangeState(State.INIT);
+    }
 
+    private void ChangeState(State state)
+    {
+        switch (state)
+        {
+            case State.INIT:
+                StartCoroutine(InitializeAsync(()=>
+                {
+                    ChangeState(State.MAIN);
+                }));
+                break;
+            case State.MAIN:
+                StartCoroutine(MainLoopAsync());
+                break;
+        }
+
+        m_currentState = state;
+    }
+
+    private IEnumerator InitializeAsync(Action initializedAction = null)
+    {
         chara1 = new BattleCharacter();
-        chara1.m_pieceList = new List<PieceParameter>();
-        chara1.m_pieceList.Add(new PieceParameter() { m_pieceType = PieceParameter.PieceType.Skill, m_value = 20 });
-        chara1.m_pieceList.Add(new PieceParameter() { m_pieceType = PieceParameter.PieceType.Skill, m_value = 20 });
-        chara1.m_pieceList.Add(new PieceParameter() { m_pieceType = PieceParameter.PieceType.Skill, m_value = 0 });
-        chara1.m_pieceList.Add(new PieceParameter() { m_pieceType = PieceParameter.PieceType.Skill, m_value = 20 });
-        chara1.m_pieceList.Add(new PieceParameter() { m_pieceType = PieceParameter.PieceType.Skill, m_value = 20 });
-        chara1.m_pieceList.Add(new PieceParameter() { m_pieceType = PieceParameter.PieceType.Skill, m_value = 20 });
+        chara1.m_pieceList = new List<RoulettePieceParameter>();
+        chara1.m_pieceList.Add(new RoulettePieceParameter() { m_pieceType = RoulettePieceParameter.PieceType.Skill, m_value = 20 });
+        chara1.m_pieceList.Add(new RoulettePieceParameter() { m_pieceType = RoulettePieceParameter.PieceType.Skill, m_value = 20 });
+        chara1.m_pieceList.Add(new RoulettePieceParameter() { m_pieceType = RoulettePieceParameter.PieceType.Skill, m_value = 0 });
+        chara1.m_pieceList.Add(new RoulettePieceParameter() { m_pieceType = RoulettePieceParameter.PieceType.Skill, m_value = 20 });
+        chara1.m_pieceList.Add(new RoulettePieceParameter() { m_pieceType = RoulettePieceParameter.PieceType.Skill, m_value = 20 });
+        chara1.m_pieceList.Add(new RoulettePieceParameter() { m_pieceType = RoulettePieceParameter.PieceType.Skill, m_value = 20 });
 
         chara2 = new BattleCharacter();
-        chara2.m_pieceList = new List<PieceParameter>();
-        chara2.m_pieceList.Add(new PieceParameter() { m_pieceType = PieceParameter.PieceType.Magic, m_value = 20 });
-        chara2.m_pieceList.Add(new PieceParameter() { m_pieceType = PieceParameter.PieceType.Magic, m_value = 20 });
-        chara2.m_pieceList.Add(new PieceParameter() { m_pieceType = PieceParameter.PieceType.Magic, m_value = 20 });
-        chara2.m_pieceList.Add(new PieceParameter() { m_pieceType = PieceParameter.PieceType.Magic, m_value = 20 });
-        chara2.m_pieceList.Add(new PieceParameter() { m_pieceType = PieceParameter.PieceType.Magic, m_value = 0 });
-        chara2.m_pieceList.Add(new PieceParameter() { m_pieceType = PieceParameter.PieceType.Magic, m_value = 20 });
+        chara2.m_pieceList = new List<RoulettePieceParameter>();
+        chara2.m_pieceList.Add(new RoulettePieceParameter() { m_pieceType = RoulettePieceParameter.PieceType.Magic, m_value = 20 });
+        chara2.m_pieceList.Add(new RoulettePieceParameter() { m_pieceType = RoulettePieceParameter.PieceType.Magic, m_value = 20 });
+        chara2.m_pieceList.Add(new RoulettePieceParameter() { m_pieceType = RoulettePieceParameter.PieceType.Magic, m_value = 20 });
+        chara2.m_pieceList.Add(new RoulettePieceParameter() { m_pieceType = RoulettePieceParameter.PieceType.Magic, m_value = 20 });
+        chara2.m_pieceList.Add(new RoulettePieceParameter() { m_pieceType = RoulettePieceParameter.PieceType.Magic, m_value = 0 });
+        chara2.m_pieceList.Add(new RoulettePieceParameter() { m_pieceType = RoulettePieceParameter.PieceType.Magic, m_value = 20 });
 
         m_roulette[0].Initialize(chara1);
         m_roulette[1].Initialize(chara2);
 
-        StartCoroutine(LoadAddressableAssetTest());
-        StartCoroutine(MainLoopAsync());
+        yield return LoadAddressableAssetTest();
+
+        initializedAction?.Invoke();
     }
 
     public IEnumerator LoadAddressableAssetTest()
@@ -97,7 +130,7 @@ public class Main : MonoBehaviour
 
         int rouletteTarget = 0;
         int opponentPlayerNum = 0;
-        PieceParameter selectPieceParam;
+        RoulettePieceParameter selectPieceParam;
         BattleCharacter chara;
         bool endBattle = false;
 
@@ -121,19 +154,19 @@ public class Main : MonoBehaviour
             selectPieceParam = m_roulette[rouletteTarget].GetSelectPieceParameter();
             switch (selectPieceParam.m_pieceType)
             {
-                case PieceParameter.PieceType.Damage:
+                case RoulettePieceParameter.PieceType.Damage:
                     opponentPlayerNum = rouletteTarget ^ 1;
                     chara = GetCharacter(opponentPlayerNum);
-                    chara.m_healthPoint -= selectPieceParam.m_value;
+                    chara.Damage(selectPieceParam.m_value);
                     Debug.Log($"プレイヤー{rouletteTarget + 1}の攻撃　プレイヤー{opponentPlayerNum+1}に{selectPieceParam.m_value}のダメージ");
-                    if(chara.m_healthPoint <= 0)
+                    if(chara.CurrentHP <= 0)
                     {
                         Debug.Log($"プレイヤー{opponentPlayerNum + 1}は力尽きた プレイヤー{rouletteTarget + 1}の勝利");
                         endBattle = true;
                     }
 
                     break;
-                case PieceParameter.PieceType.Miss:
+                case RoulettePieceParameter.PieceType.Miss:
                     Debug.Log($"プレイヤー{rouletteTarget + 1}の攻撃はミス");
                     break;
             }

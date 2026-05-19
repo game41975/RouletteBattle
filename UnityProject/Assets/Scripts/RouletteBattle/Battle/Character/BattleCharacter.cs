@@ -4,86 +4,50 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RouletteBattle.Battle;
 
 namespace RouletteBattle.Battle.Character
 {
-    public class BattleCharacterStatus
-    {
-        /// <summary>力</summary>
-        public int m_power;
-        /// <summary>知力</summary>
-        public int m_intelligence;
-        /// <summary>素早さ</summary>
-        public int m_speed;
-        /// <summary>最大体力</summary>
-        public int m_maxHealthPoint;
-        /// <summary>最大技ポイント</summary>
-        public int m_maxMagicPoint;
-    }
-
-    public class PieceParameter
-    {
-        public enum PieceType
-        {
-            None = 0,
-
-            /// <summary></summary>
-            Damage,
-            Miss,
-            Heal,
-
-            /// <summary>通常攻撃</summary>
-            Attack,
-            //MagicAttack,
-
-            /// <summary>魔法</summary>
-            Magic,
-            /// <summary>特技</summary>
-            Skill,
-
-            MAX,
-        }
-
-
-        public PieceType m_pieceType;
-
-        /// <summary>
-        /// 効果量
-        /// </summary>
-        public int m_value;
-    }
-
     public class BattleCharacter:CharacterBase
     {
-        public List<PieceParameter> m_pieceList;
+        public List<RoulettePieceParameter> m_pieceList;
 
-        public BattleCharacterStatus m_status;
+        public CharacterStatus m_status = new CharacterStatus();
 
         public List<Magic> m_magicList;
         public List<Skill> m_skillList;
 
-        /// <summary>体力</summary>
-        public int m_healthPoint;
-        /// <summary>技ポイント</summary>
-        public int m_magicPoint;
+        public int MaxHP
+        {
+            get
+            {
+                return m_originStatus != null ? m_originStatus.HP : 0;
+            }
+        }
+        public int CurrentHP => m_status.HP;
+        
+        public BattleCharacter()
+        {
+        }
+
+        public void Init(DataImporter.CharacterInitStatus status)
+        {
+            m_originStatus = new CharacterStatus();
+            m_originStatus.Init(status);
+
+            m_status.Init(status);
+        }
+
+        public virtual void Damage(int damage)
+        {
+            m_status.SetHP(m_status.HP - damage);
+        }
 
         /// <summary>
         /// テスト用の初期値設定
         /// </summary>
-        public BattleCharacter()
+        public void SetTestSkills()
         {
-            m_status = new BattleCharacterStatus()
-            {
-                m_maxHealthPoint = 100,
-                m_power = 20,
-                m_intelligence = 20,
-                m_speed = 20,
-                m_maxMagicPoint = 50,
-            };
-
-            m_healthPoint = m_status.m_maxHealthPoint;
-            m_magicPoint = m_status.m_maxMagicPoint;
-
             m_magicList = new List<Magic>()
             {
                 new Magic()
