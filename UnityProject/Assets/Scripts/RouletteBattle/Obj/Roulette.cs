@@ -14,19 +14,35 @@ namespace RouletteBattle
 
         private List<RoulettePiece> m_pieceList;
 
-        private int m_selectedPieceCount = 0;
+        private int m_selectedPieceIndex = -1;
 
         private Coroutine m_coroutineRoulette = null;
 
+        private BattleCharacter m_character;
+        private int m_currentRouletteId = 0;
+
         public RoulettePieceParameter GetSelectPieceParameter()
         {
-            return m_pieceList[m_selectedPieceCount].GetParam();
+            return m_pieceList[m_selectedPieceIndex].GetParam();
+        }
+
+        public BattleCommandData GetSelectCommand()
+        {
+            return m_pieceList[m_selectedPieceIndex].CommandData;
         }
 
         private void ClearPieceList()
         {
             if(m_pieceList != null)
             {
+                for (int i = 0; i < m_pieceList.Count; i++)
+                {
+                    var piece = m_pieceList[i];
+                    if (piece != null)
+                    {
+                        Destroy(piece.gameObject);
+                    }
+                }
                 m_pieceList.Clear();
             }
             else
@@ -36,20 +52,81 @@ namespace RouletteBattle
         }
 
         public void Initialize(BattleCharacter character)
+        {            
+            m_character = character;
+            SetRoulette();
+        }
+
+        private void SetRoulette(SkillRouletteData rouletteData, bool clearPiece = true, bool keepSelect = false)
         {
-            ClearPieceList();
-            if (m_roulettePiecePrefab != null)
+            if (m_roulettePiecePrefab == null)
             {
-                for (int i = 0; i < character.m_pieceList.Count; i++)
+                Debug.Log("ルーレットピースのモデルデータがnull");
+                return;
+            }
+
+            if (rouletteData != null)
+            {
+                m_currentRouletteId = rouletteData.rouletteId;
+
+                if (clearPiece)
                 {
-                    var instObj = Instantiate(m_roulettePiecePrefab, transform);
-                    if (instObj != null)
+                    ClearPieceList();
+                }
+
+                for (int i = 0; i < rouletteData.commandIds.Length; i++)
+                {
+                    var commandData = TestDataManager.GetCommandData(rouletteData.commandIds[i]);
+                    if (commandData != null)
                     {
-                        instObj.gameObject.SetActive(true);
-                        instObj.Init(character.m_pieceList[i]);
-                        m_pieceList.Add(instObj);
+                        var instObj = Instantiate(m_roulettePiecePrefab, transform);
+                        if (instObj != null)
+                        {
+                            instObj.gameObject.SetActive(true);
+                            instObj.Init(commandData);
+                            m_pieceList.Add(instObj);
+                        }
                     }
                 }
+
+                if (keepSelect) 
+                {
+                    if(m_pieceList.Count >= m_selectedPieceIndex)
+                    {
+                        m_pieceList[m_selectedPieceIndex].SetSelect(true);
+                    }
+                    else
+                    {
+                        m_selectedPieceIndex = 0;
+                    }
+                }
+                else
+                {
+                    m_selectedPieceIndex = -1;
+                }
+            }
+        }
+
+        /// <summary>
+        /// ルーレット設定(指定のルーレット)
+        /// </summary>
+        /// <param name="rouletteId"></param>
+        /// <param name="clearPiece"></param>
+        public void SetRoulette(int rouletteId, bool clearPiece = true)
+        {
+            var rouletteData = TestDataManager.GetRouletteData(rouletteId);
+            SetRoulette(rouletteData);
+        }
+
+        /// <summary>
+        /// ルーレット設定(装備武器の初期ルーレット)
+        /// </summary>
+        public void SetRoulette(bool keepSelect = false)
+        {
+            if (m_character.WeaponData != null)
+            {
+                var rouletteData = TestDataManager.GetRouletteData(m_character.WeaponData.rouletteId);
+                SetRoulette(rouletteData,keepSelect:keepSelect);
             }
         }
 
@@ -63,29 +140,34 @@ namespace RouletteBattle
 
         private IEnumerator RouletteAsync()
         {
-            int count = 0;
+            int frameCount = 0;
 
-            //m_selectedPieceCount = 0;
-            m_pieceList[m_selectedPieceCount].SetSelect(true);
+            //初期値の場合は先頭を選択状態にしておく
+            if(m_selectedPieceIndex == -1)
+            {
+                m_selectedPieceIndex = 0;
+            }
+
+            m_pieceList[m_selectedPieceIndex].SetSelect(true);
 
             while (true)
             {
-                count++;
+                frameCount++;
 
                 //6フレ経過後に次にマスに移動
-                if(count >= 6)
+                if(frameCount >= 6)
                 {
-                    m_pieceList[m_selectedPieceCount].SetSelect(false);
+                    m_pieceList[m_selectedPieceIndex].SetSelect(false);
                     
-                    m_selectedPieceCount++;
-                    if(m_selectedPieceCount >= m_pieceList.Count)
+                    m_selectedPieceIndex++;
+                    if(m_selectedPieceIndex >= m_pieceList.Count)
                     {
-                        m_selectedPieceCount = 0;
+                        m_selectedPieceIndex = 0;
                     }
 
-                    m_pieceList[m_selectedPieceCount].SetSelect(true);
+                    m_pieceList[m_selectedPieceIndex].SetSelect(true);
 
-                    count = 0;
+                    frameCount = 0;
                 }
 
                 yield return null;

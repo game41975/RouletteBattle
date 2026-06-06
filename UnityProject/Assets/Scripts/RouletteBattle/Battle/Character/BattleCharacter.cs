@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RouletteBattle.Battle;
+using RouletteBattle.Battle.Character;
 
 namespace RouletteBattle.Battle.Character
 {
@@ -14,8 +15,8 @@ namespace RouletteBattle.Battle.Character
 
         public CharacterStatus m_status = new CharacterStatus();
 
-        public List<Magic> m_magicList;
-        public List<Skill> m_skillList;
+        private CharacterClassData classData;
+        private Weapon weaponData;
 
         public int MaxHP
         {
@@ -25,12 +26,14 @@ namespace RouletteBattle.Battle.Character
             }
         }
         public int CurrentHP => m_status.HP;
-        
+
+        public Weapon WeaponData => weaponData;
+
         public BattleCharacter()
         {
         }
 
-        public void Init(DataImporter.CharacterInitStatus status)
+        public void SetInitStatus(DataImporter.CharacterInitStatus status)
         {
             m_originStatus = new CharacterStatus();
             m_originStatus.Init(status);
@@ -38,70 +41,15 @@ namespace RouletteBattle.Battle.Character
             m_status.Init(status);
         }
 
+        public void Init(int classId,int weaponId)
+        {
+            classData = TestDataManager.GetClassData(classId);
+            weaponData = TestDataManager.GetWeaponData(weaponId);
+        }
+
         public virtual void Damage(int damage)
         {
             m_status.SetHP(m_status.HP - damage);
-        }
-
-        /// <summary>
-        /// テスト用の初期値設定
-        /// </summary>
-        public void SetTestSkills()
-        {
-            m_magicList = new List<Magic>()
-            {
-                new Magic()
-                {
-                    m_abillityName = "まほう1"
-                },
-                new Magic()
-                {
-                    m_abillityName = "まほう2"
-                },
-                new Magic()
-                {
-                    m_abillityName = "まほう3"
-                },
-                new Magic()
-                {
-                    m_abillityName = "まほう4"
-                },
-                new Magic()
-                {
-                    m_abillityName = "まほう5"
-                },
-                new Magic()
-                {
-                    m_abillityName = "まほう6"
-                },
-            };
-            m_skillList = new List<Skill>()
-            {
-                new Skill()
-                {
-                    m_abillityName = "とくぎ1"
-                },
-                new Skill()
-                {
-                    m_abillityName = "とくぎ2"
-                },
-                new Skill()
-                {
-                    m_abillityName = "とくぎ3"
-                },
-                new Skill()
-                {
-                    m_abillityName = "とくぎ4"
-                },
-                new Skill()
-                {
-                    m_abillityName = "とくぎ5"
-                },
-                new Skill()
-                {
-                    m_abillityName = "とくぎ6"
-                }
-            };
         }
     }
 }

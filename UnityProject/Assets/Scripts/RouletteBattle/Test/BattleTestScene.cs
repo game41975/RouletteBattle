@@ -1,13 +1,16 @@
-using RouletteBattle.Battle.Character;
-using UnityEngine;
-using System.Collections.Generic;
-using System.Collections;
-using System;
-using System.ComponentModel;
-using Unity.Collections;
-using UnityEngine.AddressableAssets;
 using DataImporter;
+using NPOI.SS.Formula.Functions;
+using NPOI.SS.UserModel;
 using RouletteBattle.Battle;
+using RouletteBattle.Battle.Character;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.Design;
+using Unity.Collections;
+using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 public class BattleTestScene : MonoBehaviour
 {
@@ -27,8 +30,7 @@ public class BattleTestScene : MonoBehaviour
     private BattleCharacter chara1;
     private BattleCharacter chara2;
 
-    private State m_currentState;    
-
+    private State m_currentState;
 
     public void Start()
     {
@@ -55,41 +57,36 @@ public class BattleTestScene : MonoBehaviour
 
     private IEnumerator InitializeAsync(Action initializedAction = null)
     {
+        yield return TestDataManager.InitializeAsync();
+
         chara1 = new BattleCharacter();
-        chara1.m_pieceList = new List<RoulettePieceParameter>();
-        chara1.m_pieceList.Add(new RoulettePieceParameter() { m_pieceType = RoulettePieceParameter.PieceType.Skill, m_value = 20 });
-        chara1.m_pieceList.Add(new RoulettePieceParameter() { m_pieceType = RoulettePieceParameter.PieceType.Skill, m_value = 20 });
-        chara1.m_pieceList.Add(new RoulettePieceParameter() { m_pieceType = RoulettePieceParameter.PieceType.Skill, m_value = 0 });
-        chara1.m_pieceList.Add(new RoulettePieceParameter() { m_pieceType = RoulettePieceParameter.PieceType.Skill, m_value = 20 });
-        chara1.m_pieceList.Add(new RoulettePieceParameter() { m_pieceType = RoulettePieceParameter.PieceType.Skill, m_value = 20 });
-        chara1.m_pieceList.Add(new RoulettePieceParameter() { m_pieceType = RoulettePieceParameter.PieceType.Skill, m_value = 20 });
+        chara1.Init(1, 1);
+        chara1.SetInitStatus(new CharacterInitStatus()
+        {
+            id = 1,
+            hp = 100,
+            mp = 0,
+            intelligence = 0,
+            strength = 10,
+            speed = 1,
+        });
 
         chara2 = new BattleCharacter();
-        chara2.m_pieceList = new List<RoulettePieceParameter>();
-        chara2.m_pieceList.Add(new RoulettePieceParameter() { m_pieceType = RoulettePieceParameter.PieceType.Magic, m_value = 20 });
-        chara2.m_pieceList.Add(new RoulettePieceParameter() { m_pieceType = RoulettePieceParameter.PieceType.Magic, m_value = 20 });
-        chara2.m_pieceList.Add(new RoulettePieceParameter() { m_pieceType = RoulettePieceParameter.PieceType.Magic, m_value = 20 });
-        chara2.m_pieceList.Add(new RoulettePieceParameter() { m_pieceType = RoulettePieceParameter.PieceType.Magic, m_value = 20 });
-        chara2.m_pieceList.Add(new RoulettePieceParameter() { m_pieceType = RoulettePieceParameter.PieceType.Magic, m_value = 0 });
-        chara2.m_pieceList.Add(new RoulettePieceParameter() { m_pieceType = RoulettePieceParameter.PieceType.Magic, m_value = 20 });
+        chara2.Init(2, 2);
+        chara2.SetInitStatus(new CharacterInitStatus()
+        {
+            id = 2,
+            hp = 85,
+            mp = 0,
+            intelligence = 10,
+            strength = 5,
+            speed = 1,
+        });
 
         m_roulette[0].Initialize(chara1);
         m_roulette[1].Initialize(chara2);
 
-        yield return LoadAddressableAssetTest();
-
         initializedAction?.Invoke();
-    }
-
-    public IEnumerator LoadAddressableAssetTest()
-    {
-        var handle = Addressables.LoadAssetAsync<ScriptableObjectBase>("CharacterInitStatus");
-        yield return handle.Task;
-
-        if (handle.IsDone)
-        {
-            var loadData = handle.Result;
-        }
 
         yield break;
     }
@@ -110,18 +107,6 @@ public class BattleTestScene : MonoBehaviour
 
     public void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.Space))
-        //{
-        //    if (!m_roulette[0].IsPlayingRoulette())
-        //    {
-        //        m_roulette[0].StartRoulette();
-        //        Debug.Log("StartRoulette");
-        //    }
-        //    else
-        //    {
-        //        m_roulette[0].StopRoulette();
-        //    }
-        //}
     }
 
     private IEnumerator MainLoopAsync()
@@ -131,44 +116,62 @@ public class BattleTestScene : MonoBehaviour
         int rouletteTarget = 0;
         int opponentPlayerNum = 0;
         RoulettePieceParameter selectPieceParam;
+        BattleCommandData commandData = null;
         BattleCharacter chara;
         bool endBattle = false;
+        bool turnEnd = false;
 
         while (true)
         {
             Debug.Log($"プレイヤー{rouletteTarget + 1}のターン");
 
-            m_roulette[rouletteTarget].StartRoulette();
+            turnEnd = false;
 
-            yield return new WaitWhile(() => 
+            while (!turnEnd)
             {
-                if (Input.GetKeyDown(KeyCode.Space))
+                m_roulette[rouletteTarget].StartRoulette();
+
+                yield return new WaitWhile(() =>
                 {
-                    return false;
-                }
-                return true;
-            });
-
-            m_roulette[rouletteTarget].StopRoulette();
-
-            selectPieceParam = m_roulette[rouletteTarget].GetSelectPieceParameter();
-            switch (selectPieceParam.m_pieceType)
-            {
-                case RoulettePieceParameter.PieceType.Damage:
-                    opponentPlayerNum = rouletteTarget ^ 1;
-                    chara = GetCharacter(opponentPlayerNum);
-                    chara.Damage(selectPieceParam.m_value);
-                    Debug.Log($"プレイヤー{rouletteTarget + 1}の攻撃　プレイヤー{opponentPlayerNum+1}に{selectPieceParam.m_value}のダメージ");
-                    if(chara.CurrentHP <= 0)
+                    if (Input.GetKeyDown(KeyCode.Space))
                     {
-                        Debug.Log($"プレイヤー{opponentPlayerNum + 1}は力尽きた プレイヤー{rouletteTarget + 1}の勝利");
-                        endBattle = true;
+                        return false;
                     }
+                    return true;
+                });
 
-                    break;
-                case RoulettePieceParameter.PieceType.Miss:
-                    Debug.Log($"プレイヤー{rouletteTarget + 1}の攻撃はミス");
-                    break;
+                m_roulette[rouletteTarget].StopRoulette();
+
+                selectPieceParam = m_roulette[rouletteTarget].GetSelectPieceParameter();
+
+                commandData = m_roulette[rouletteTarget].GetSelectCommand();
+                switch (commandData.commandType)
+                {
+                    case CommandType.Attack:
+                        {
+                            opponentPlayerNum = rouletteTarget ^ 1;
+                            chara = GetCharacter(opponentPlayerNum);
+                            var owner = GetCharacter(rouletteTarget);
+                            int damage = CalcDamage(owner, chara, commandData);
+                            chara.Damage(damage);
+                            Debug.Log($"プレイヤー{rouletteTarget + 1}の{commandData.commandName} プレイヤー{opponentPlayerNum + 1}に{damage}のダメージ");
+                            if (chara.CurrentHP <= 0)
+                            {
+                                Debug.Log($"プレイヤー{opponentPlayerNum + 1}は力尽きた プレイヤー{rouletteTarget + 1}の勝利");
+                                endBattle = true;
+                            }
+                        }
+                        turnEnd = true;
+                        break;
+                    case CommandType.NextRoulette:
+                        {
+                            m_roulette[rouletteTarget].SetRoulette(commandData.rouletteId);
+                        }
+                        Debug.Log($"プレイヤー{rouletteTarget+1}の{commandData.commandName}");
+                        break;
+                }
+
+                yield return null;
             }
 
             if (endBattle)
@@ -176,6 +179,8 @@ public class BattleTestScene : MonoBehaviour
                 break;
             }
 
+            //ルーレット設定をデフォに戻す
+            m_roulette[rouletteTarget].SetRoulette(true);
             //ルーレット対象プレイヤーを入れ替え
             rouletteTarget ^= 1;
 
@@ -187,4 +192,31 @@ public class BattleTestScene : MonoBehaviour
         yield break;
     }
 
+
+    private int CalcDamage(BattleCharacter owner, BattleCharacter target, BattleCommandData useCommand)
+    {
+        int baseCharacterPower = 0;
+        switch (useCommand.attackType)
+        {
+            case AttackAttributeType.Physical:
+                baseCharacterPower = owner.m_status.Strength;
+                break;
+            case AttackAttributeType.Magic:
+                baseCharacterPower = owner.m_status.Intelligence;
+                break;
+        }
+
+        int damageValue = 0;
+        switch (useCommand.powerCalclateType)
+        {
+            case PowerCalclateMethodType.CharacterPower:
+                damageValue = baseCharacterPower;
+                break;
+            case PowerCalclateMethodType.AddCharacterPower:
+                damageValue = baseCharacterPower + useCommand.power;
+                break;
+        }
+
+        return damageValue;
+    }
 }

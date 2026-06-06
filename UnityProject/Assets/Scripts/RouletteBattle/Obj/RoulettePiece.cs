@@ -18,10 +18,14 @@ namespace RouletteBattle
         private RoulettePieceParameter m_param;
         private RoulettePieceParameter.PieceType m_pieceType;
 
+        private BattleCommandData m_commandData;
+
         public RoulettePieceParameter GetParam()
         {
             return m_param;
         }
+
+        public BattleCommandData CommandData => m_commandData;
 
         public void Init(RoulettePieceParameter param)
         {
@@ -43,11 +47,11 @@ namespace RouletteBattle
             SetSelect(false);
         }
 
-        public void Init(AbillityBase abillity)
+        public void Init(BattleCommandData data)
         {
-            //テキスト設定
-            string setText = abillity.GetAbillityName();
+            m_commandData = data;
 
+            string setText = data.commandName;
             m_text.text = setText;
 
             SetSelect(false);
