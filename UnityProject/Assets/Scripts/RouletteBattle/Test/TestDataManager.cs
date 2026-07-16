@@ -54,20 +54,54 @@ public static class TestDataManager
                 }
             }
         });
-        //m_testStyleDataList.Add(new CharacterStyleData()
-        //{
-        //    styleId = 2,
-        //    targetClassIds = new int[] {1},
-        //    name = "戦士スタイル2",
-        //    description = ""
-        //});
-        //m_testStyleDataList.Add(new CharacterStyleData()
-        //{
-        //    styleId = 3,
-        //    targetClassIds = new int[] { 1 },
-        //    name = "戦士スタイル3",
-        //    description = ""
-        //});
+        m_testStyleDataList.Add(new CharacterStyleData()
+        {
+            styleId = 2,
+            targetClassIds = new int[] { 1 },
+            name = "戦士スタイル2",
+            description = "",
+            type = StyleType.STATUS_BUFF_DEBUFF,
+            options = new CharacterStyleOptionData[]
+            {
+                new CharacterStyleOptionData()
+                {
+                    target = CharacterParameterType.STR,
+                    value = 10
+                }
+            }
+        });
+        m_testStyleDataList.Add(new CharacterStyleData()
+        {
+            styleId = 3,
+            targetClassIds = new int[] { 1 },
+            name = "戦士スタイル3",
+            description = "",
+            type = StyleType.STATUS_BUFF_DEBUFF,
+            options = new CharacterStyleOptionData[]
+            {
+                new CharacterStyleOptionData()
+                {
+                    target = CharacterParameterType.STR,
+                    value = 10
+                }
+            }
+        });
+        m_testStyleDataList.Add(new CharacterStyleData()
+        {
+            styleId = 4,
+            targetClassIds = new int[] { 1 },
+            name = "戦士スタイル4",
+            description = "",
+            type = StyleType.STATUS_BUFF_DEBUFF,
+            options = new CharacterStyleOptionData[]
+            {
+                new CharacterStyleOptionData()
+                {
+                    target = CharacterParameterType.STR,
+                    value = 10
+                }
+            }
+        });
 
         m_testStyleDataList.Add(new CharacterStyleData()
         {

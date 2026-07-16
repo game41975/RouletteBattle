@@ -11,6 +11,8 @@ namespace RouletteBattle
     {
         [SerializeField]
         private RoulettePiece m_roulettePiecePrefab;
+        [SerializeField]
+        private RectTransform m_rootPieceObject;
 
         private List<RoulettePiece> m_pieceList;
 
@@ -51,7 +53,7 @@ namespace RouletteBattle
             }
         }
 
-        public void Initialize(BattleCharacter character)
+        public void Init(BattleCharacter character)
         {            
             m_character = character;
             SetRoulette();
@@ -79,7 +81,7 @@ namespace RouletteBattle
                     var commandData = TestDataManager.GetCommandData(rouletteData.commandIds[i]);
                     if (commandData != null)
                     {
-                        var instObj = Instantiate(m_roulettePiecePrefab, transform);
+                        var instObj = Instantiate(m_roulettePiecePrefab, m_rootPieceObject);
                         if (instObj != null)
                         {
                             instObj.gameObject.SetActive(true);

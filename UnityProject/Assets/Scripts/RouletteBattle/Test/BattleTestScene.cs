@@ -1,6 +1,7 @@
 using DataImporter;
 using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
+using RouletteBattle;
 using RouletteBattle.Battle;
 using RouletteBattle.Battle.Character;
 using System;
@@ -19,6 +20,7 @@ public class BattleTestScene : MonoBehaviour
         None = -1,
 
         INIT,
+        INIT_SETTINGS,
         MAIN,
 
         Max
@@ -26,8 +28,10 @@ public class BattleTestScene : MonoBehaviour
 
     [SerializeField]
     private RouletteBattle.Roulette[] m_roulette;
+    [SerializeField]
+    private CharacterStatusUI[] m_statusUi;
 
-    private BattleCharacter chara1;
+    private BattleCharacter player;
     private BattleCharacter chara2;
 
     private State m_currentState;
@@ -44,8 +48,11 @@ public class BattleTestScene : MonoBehaviour
             case State.INIT:
                 StartCoroutine(InitializeAsync(()=>
                 {
+                    //ChangeState(State.INIT_SETTINGS);
                     ChangeState(State.MAIN);
                 }));
+                break;
+            case State.INIT_SETTINGS:
                 break;
             case State.MAIN:
                 StartCoroutine(MainLoopAsync());
@@ -59,9 +66,10 @@ public class BattleTestScene : MonoBehaviour
     {
         yield return TestDataManager.InitializeAsync();
 
-        chara1 = new BattleCharacter();
-        chara1.Init(1, 1);
-        chara1.SetInitStatus(new CharacterInitStatus()
+        player = new BattleCharacter();
+        player.Init(1, 1);
+        player.SetName("プレイヤー");
+        player.SetInitStatus(new CharacterInitStatus()
         {
             id = 1,
             hp = 100,
@@ -70,9 +78,11 @@ public class BattleTestScene : MonoBehaviour
             strength = 10,
             speed = 1,
         });
+        player.AddStyles(new int[] { 1, 2, 3, 4 });
 
         chara2 = new BattleCharacter();
         chara2.Init(2, 2);
+        chara2.SetName("プレイヤー2");
         chara2.SetInitStatus(new CharacterInitStatus()
         {
             id = 2,
@@ -83,20 +93,39 @@ public class BattleTestScene : MonoBehaviour
             speed = 1,
         });
 
-        m_roulette[0].Initialize(chara1);
-        m_roulette[1].Initialize(chara2);
+        m_roulette[0].Init(player);
+        m_roulette[1].Init(chara2);
+
+        m_statusUi[0].Init(player.MaxHP, player.GetName());
+        m_statusUi[1].Init(chara2.MaxHP, chara2.GetName());
+        m_statusUi[0].Init(player);
+        m_statusUi[1].Init(chara2);
 
         initializedAction?.Invoke();
 
         yield break;
     }
 
+    private IEnumerator SettingsAsync(Action endAction = null)
+    {
+        //職業選択
+
+
+        //スタイル選択
+
+        //
+
+
+
+        endAction?.Invoke();
+        yield break;
+    }
 
     private BattleCharacter GetCharacter(int num)
     {
         if(num == 0)
         {
-            return chara1;
+            return player;
         }
         else if(num == 1)
         {
@@ -120,6 +149,7 @@ public class BattleTestScene : MonoBehaviour
         BattleCharacter chara;
         bool endBattle = false;
         bool turnEnd = false;
+        const float WaitTime = 0.5f;
 
         while (true)
         {
@@ -154,6 +184,7 @@ public class BattleTestScene : MonoBehaviour
                             var owner = GetCharacter(rouletteTarget);
                             int damage = CalcDamage(owner, chara, commandData);
                             chara.Damage(damage);
+                            m_statusUi[opponentPlayerNum].SetCurrentHP(-damage);
                             Debug.Log($"プレイヤー{rouletteTarget + 1}の{commandData.commandName} プレイヤー{opponentPlayerNum + 1}に{damage}のダメージ");
                             if (chara.CurrentHP <= 0)
                             {
@@ -171,7 +202,7 @@ public class BattleTestScene : MonoBehaviour
                         break;
                 }
 
-                yield return null;
+                yield return new WaitForSeconds(WaitTime);
             }
 
             if (endBattle)
@@ -199,10 +230,10 @@ public class BattleTestScene : MonoBehaviour
         switch (useCommand.attackType)
         {
             case AttackAttributeType.Physical:
-                baseCharacterPower = owner.m_status.Strength;
+                baseCharacterPower = owner.GetStatus().Strength;
                 break;
             case AttackAttributeType.Magic:
-                baseCharacterPower = owner.m_status.Intelligence;
+                baseCharacterPower = owner.GetStatus().Intelligence;
                 break;
         }
 

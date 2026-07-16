@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8374052384968310428
+--- !u!1 &4363207871150279533
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,9 +8,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1762435630479837251}
-  - component: {fileID: 9127238912731356857}
-  - component: {fileID: 2773828382534059400}
+  - component: {fileID: 9206501220982664651}
+  - component: {fileID: 4743631345909049959}
   m_Layer: 5
   m_Name: Roulette
   m_TagString: Untagged
@@ -18,33 +17,160 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &1762435630479837251
+--- !u!224 &9206501220982664651
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8374052384968310428}
+  m_GameObject: {fileID: 4363207871150279533}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5467752273618909419}
+  - {fileID: 5996979263330617039}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -128.25, y: -0.000015259}
-  m_SizeDelta: {x: 256.5, y: 506}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &9127238912731356857
+--- !u!114 &4743631345909049959
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8374052384968310428}
+  m_GameObject: {fileID: 4363207871150279533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c23b5d9f67a30e140a76a29283785b40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RouletteBattle.Roulette
+  m_roulettePiecePrefab: {fileID: 1300391555594270680}
+  m_rootPieceObject: {fileID: 8387436429172189775}
+--- !u!1 &6434172721828338071
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5996979263330617039}
+  - component: {fileID: 6035141877334757569}
+  - component: {fileID: 5251040535315322017}
+  m_Layer: 5
+  m_Name: bg
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &5996979263330617039
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6434172721828338071}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 8387436429172189775}
+  m_Father: {fileID: 9206501220982664651}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 256.49, y: 506}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &6035141877334757569
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6434172721828338071}
+  m_CullTransparentMesh: 1
+--- !u!114 &5251040535315322017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6434172721828338071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!1 &7652203334652545724
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8387436429172189775}
+  - component: {fileID: 1297362414004065131}
+  m_Layer: 5
+  m_Name: Roulette
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8387436429172189775
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7652203334652545724}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2503859592993123131}
+  m_Father: {fileID: 5996979263330617039}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0.000015258789, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1297362414004065131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7652203334652545724}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
@@ -64,26 +190,13 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &2773828382534059400
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8374052384968310428}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c23b5d9f67a30e140a76a29283785b40, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Roulette
-  m_roulettePiecePrefab: {fileID: 8887237637592687624}
---- !u!1001 &825510444474081593
+--- !u!1001 &7073723251589657321
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1762435630479837251}
+    m_TransformParent: {fileID: 8387436429172189775}
     m_Modifications:
     - target: {fileID: 2529885224235094259, guid: b38bd7643ee0ae543b0c8dbcf145d3ec, type: 3}
       propertyPath: m_Name
@@ -178,15 +291,10 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b38bd7643ee0ae543b0c8dbcf145d3ec, type: 3}
---- !u!224 &5467752273618909419 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 4653791649072355794, guid: b38bd7643ee0ae543b0c8dbcf145d3ec, type: 3}
-  m_PrefabInstance: {fileID: 825510444474081593}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &8887237637592687624 stripped
+--- !u!114 &1300391555594270680 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8079742416270198065, guid: b38bd7643ee0ae543b0c8dbcf145d3ec, type: 3}
-  m_PrefabInstance: {fileID: 825510444474081593}
+  m_PrefabInstance: {fileID: 7073723251589657321}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -194,3 +302,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31b53b02e04abd44dba701f8d5a4f694, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RouletteBattle.RoulettePiece
+--- !u!224 &2503859592993123131 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4653791649072355794, guid: b38bd7643ee0ae543b0c8dbcf145d3ec, type: 3}
+  m_PrefabInstance: {fileID: 7073723251589657321}
+  m_PrefabAsset: {fileID: 0}

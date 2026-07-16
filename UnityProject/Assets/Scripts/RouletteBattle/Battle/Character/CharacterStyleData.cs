@@ -20,6 +20,8 @@ namespace RouletteBattle.Battle.Character
     {
         /// <summary>ステータス増減</summary>
         STATUS_BUFF_DEBUFF,
+        /// <summary>ステータス倍率補正</summary>
+        STATUS_SCALING,
     }
 
 
